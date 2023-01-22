@@ -24,7 +24,6 @@ public class Product {
             this.min = min;
             this.max = max;
         }
-
         /**
          * @return the id
          */

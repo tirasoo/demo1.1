@@ -7,16 +7,35 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static com.example.demo1.Inventory.allParts;
+import static com.example.demo1.Inventory.allProducts;
+
 public class MainScreenController implements Initializable {
+    public TableColumn<Object, Object> partIdCol;
+    public TableColumn<Object, Object> partNameCol;
+    public TableColumn<Object, Object> invLevelCol;
+    public TableColumn<Object, Object> priceCostCol;
+    public TableColumn<Object, Object> productIdCol;
+    public TableColumn<Object, Object> productNameCol;
+    public TableColumn InvLevelCol;
+    public TableColumn<Object, Object> PriceCostCol;
     Stage stage;
     Parent scene;
+    @FXML
+    private TableView<Part> partsMainTableView;
+    @FXML
+    private TableView<Product> productsMainTableView;
+    @FXML
+    private TableView<Part> addPartTableView;
 
     @FXML
     public void onActionOpenAddParForm(ActionEvent event) throws IOException {
@@ -26,18 +45,28 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
+    //selection of part to be modified from partsMainTable
     public void onActionOpenModifyPartForm(ActionEvent event) throws IOException {
+        Part SP = partsMainTableView.getSelectionModel().getSelectedItem();
+        if (SP == null)
+            return;
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("ModifyPartForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyPartForm.fxml"));
+        scene = loader.load();
+        ModifyPartController controller = loader.getController();
+        controller.setparts(SP);
+        stage.setTitle("Modify Part");
         stage.setScene(new Scene(scene));
         stage.show();
     }
 
-    public void onActionDeleteSelectedPart(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    //selection of row or part and deletion of selected part
+    public void onActionDeleteSelectedPart(ActionEvent event) {
+        Part SP = partsMainTableView.getSelectionModel().getSelectedItem();
+        if (SP == null)
+            return;
+        //confirmDialo
+        allParts.remove(SP);
     }
 
     public void onActionOpenModifyProductForm(ActionEvent event) throws IOException {
@@ -47,8 +76,11 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
-    public void onActionDeleteSelectedProduct() throws IOException {
-
+    public void onActionDeleteSelectedProduct() {
+        Product SP = (Product) productsMainTableView.getSelectionModel().getSelectedItem();
+        if (SP == null)
+            return;
+        allProducts.remove(SP);
     }
 
     public void onActionOpenAddProductForm(ActionEvent event) throws IOException {
@@ -62,19 +94,22 @@ public class MainScreenController implements Initializable {
         System.exit(0);
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //Load test data as per the webinar
 
-        InHouse nut = new InHouse(1, "nut", 40, 0, 100, 980, 1223);
-        InHouse screw = new InHouse(2, "screw", 80, 70, 400, 1100, 3234);
-        Outsourced chain = new Outsourced(3, "chain", 50, 40, 120, 834, "ACE Hardware");
-        Inventory.addPart(nut);
-        Inventory.addPart(screw);
-        Inventory.addPart(chain);
+        //associating tableview with list where data will be stored
+        partsMainTableView.setItems(allParts);
 
-        /*partsMainTableView.setItems(Inventory.getAllParts());
-    }*/
+        //assigning each column an attribute that you wish to display in a row
+        partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        invLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        priceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        productsMainTableView.setItems(allProducts);
+        productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        invLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 }

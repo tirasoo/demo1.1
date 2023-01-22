@@ -11,8 +11,6 @@
             super(id, name, price, stock, min, max);// call of the Part class
             this.machineId = machineId;
         }
-
-
         /**
          * @return the machineId
          */
@@ -26,7 +24,5 @@
         public void setMachineId(int machineId) {
             this.machineId = machineId;
         }
-
-
     }
 

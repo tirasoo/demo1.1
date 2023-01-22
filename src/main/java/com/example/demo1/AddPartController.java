@@ -6,18 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 public class AddPartController implements Initializable {
     Stage stage;
     Parent scene;
@@ -37,16 +30,14 @@ public class AddPartController implements Initializable {
     private TextField nameTxt;
     @FXML
     private TextField priceTxt;
-
     @FXML
-    private ToggleGroup addPartToggleGrp;
+    public ToggleGroup addPartToggleGrp;
     @FXML
     private Label labelTxt;
 
-
     //creation of an object then addition of the object to the observable list.
+    //save part
     public void onActionSavePart(ActionEvent event) throws IOException {
-        int id = Integer.parseInt(idTxt.getText());
         String name = nameTxt.getText();
         int stock = Integer.parseInt(invTxt.getText());
         double price = Double.parseDouble(priceTxt.getText());
@@ -55,44 +46,42 @@ public class AddPartController implements Initializable {
         int machineId = 0;
         String companyName = "";
 
-        //create object and add that object to the end of the Inventory list and the main menu table view
+        //create  functionality of InHouse and Outsourced  button on add part form
         if (inHouseBtn.isSelected()) {
             machineId = Integer.parseInt(machineIdTxt.getText());
-            Inventory.addPart(new InHouse(id, name, price, stock, min, max, machineId));}
-
+            Inventory.addPart(new InHouse(Inventory.getNextPartId(), name, price, stock, min, max, machineId));
+        }
         else {
             companyName = machineIdTxt.getText();
-            Inventory.addPart(new Outsourced(id, name, price, stock, min, max, companyName));
+            Inventory.addPart(new Outsourced(Inventory.getNextPartId(), name, price, stock, min, max, companyName));
         }
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
-    public void displayMainForm(ActionEvent event) throws IOException {
+    public void onActionCancelPart(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        ifButtonSelected();
 
     }
-    public void ifButtonSelected()
+    public void ifButtonSelected(ActionEvent event)
     {
         if (inHouseBtn.isSelected()){
             labelTxt.setText("Machine ID");
         }
-        if (outsourcedBtn.isSelected()){
+        else {
             labelTxt.setText("Company Name");
         }
     }
-
 }
+
 
 
 

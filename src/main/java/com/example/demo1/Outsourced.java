@@ -1,7 +1,5 @@
 package com.example.demo1;
 
-import java.util.IdentityHashMap;
-
 public class Outsourced extends Part {
 
 
@@ -19,14 +17,16 @@ public class Outsourced extends Part {
     /**
      * @param companyName the name to set
      */
-    public void setCompanyName(String companyName) {
+    public void setCompanyName(String companyName)
+    {
         this.companyName = companyName;
     }
 
     /**
      * @return the companyName
      */
-    public String getCompanyName() {
+    public String getCompanyName()
+    {
         return companyName;
     }
 }

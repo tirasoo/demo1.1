@@ -52,10 +52,10 @@ public class ModifyProductController implements Initializable {
     public void onActionAddPart(ActionEvent event) {
 
     }
-    public void removeAssociatedPart(ActionEvent event) {
+    public void onActionRemoveAssPart(ActionEvent event) {
 
     }
-    public void displayMainForm(ActionEvent event) throws IOException {
+    public void onActionCancelPart(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         stage.setScene(new Scene(scene));
