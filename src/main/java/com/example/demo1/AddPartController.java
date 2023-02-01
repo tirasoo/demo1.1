@@ -57,14 +57,15 @@ public class AddPartController implements Initializable {
         }
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        stage.setTitle("Inventory Management System");
         stage.setScene(new Scene(scene));
         stage.show();
     }
     public void onActionCancelPart(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)

@@ -7,21 +7,35 @@ public class Inventory {
         //class contents go here
         //class definition-->defining the methods and object's variables(instance variables/object fields/
         // object attributes)that  belong to them.
-
+    /**
+     *
+     */
     public static ObservableList<Part> allParts = FXCollections.observableArrayList();//allParts is the observable list where new parts objects will be put
     public static ObservableList<Product> allProducts = FXCollections.observableArrayList();//allProducts is the list here thstwill represent the data which will be displayed.
     private static int nextPartId = 1;
     private static int nextProductId = 1;
     private static String text;
 
+    /**
+     * method gives the next part id
+     * @return
+     */
     public static int getNextPartId() {
         return nextPartId++;
     }
 
+    /**
+     * this method will give the next product id
+     * @return
+     */
     public static int getNextProductId() {
         return nextProductId++;
     }
 
+    /**
+     *
+     * @param newPart accept a part object and add it to the allParts list
+     */
     public static void addPart(Part newPart) //addPart function/method used to accept a part object and add it to the list
     {
         allParts.add(newPart);//called in addPart controller with inhouse or outsourced part
@@ -80,21 +94,22 @@ public class Inventory {
         }
         return foundProducts;
     }
-    public static void updatePart(int index, Part selectedPart)
+    public static void updatePart(int index, Part SP)
     {
-        allParts.set(index, selectedPart);
+        allParts.set(index, SP);
     }
     public static void updateProduct(int index, Product newProduct)
     {
         allProducts.set(index, newProduct);
     }
-    public static boolean deletePart(Part selectedPart)
+    public static boolean deletePart(Part SP)
     {
-        return allParts.remove(selectedPart);
+        return allParts.remove(SP);
     }
-    public static boolean deleteProduct(Product selectedProduct)
+    public static boolean deleteProduct(Product SP)
+
     {
-        return allProducts.remove(selectedProduct);
+        return allProducts.remove(SP);
     }
 
     public static ObservableList<Part> getAllParts()

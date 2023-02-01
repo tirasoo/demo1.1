@@ -14,7 +14,7 @@
    <children>
       <HBox layoutX="8.0" layoutY="25.0" prefHeight="39.0" prefWidth="405.0">
          <children>
-            <Label graphicTextGap="20.0" lineSpacing="10.0" prefHeight="20.0" prefWidth="72.0" text="Add Part">
+            <Label graphicTextGap="20.0" lineSpacing="10.0" prefHeight="20.0" prefWidth="79.0" text="Add Part">
                <font>
                   <Font name="Arial Black" size="13.0" />
                </font>

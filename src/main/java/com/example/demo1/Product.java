@@ -8,7 +8,7 @@ public class Product {
         //class contents go here
         //class definition-->defining the object's variables(instance variables/object fields/object attributes)
         // that belong to them
-        private static ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+        private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
         private int id;
         private String name;
         private double price;
@@ -24,7 +24,12 @@ public class Product {
             this.min = min;
             this.max = max;
         }
-        /**
+
+    public Product() {
+
+    }
+
+    /**
          * @return the id
          */
         public int getId()
@@ -121,7 +126,7 @@ public class Product {
 
         public void addAssociatedPart(Part part)
         {
-
+associatedParts.add(part);
         }
 
         public boolean deleteAssociatedPart(Part selectedAssociatedPart)
@@ -129,7 +134,7 @@ public class Product {
             return false;
         }
 
-        public static ObservableList<Part> getAllAssociatedParts()
+        public  ObservableList<Part> getAllAssociatedParts()
         {
             return associatedParts;
         }

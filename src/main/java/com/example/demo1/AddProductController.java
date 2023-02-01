@@ -1,26 +1,30 @@
 package com.example.demo1;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.net.URL;
+import java.util.EventObject;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.example.demo1.Inventory.allParts;
+import static com.example.demo1.Inventory.getNextPartId;
+import static java.lang.Integer.parseInt;
+
 
 public class AddProductController implements Initializable {
-    public TableView addProductTableView1;
     public TableView<Part> addPartTableView;
     public TableColumn<Object, Object> partIdCol;
     public TableColumn<Object, Object> partNameCol;
@@ -31,6 +35,7 @@ public class AddProductController implements Initializable {
     public TableColumn PartNameCol;
     public TableColumn InvLevelCol;
     public TableColumn PriceCostCol;
+    private ActionEvent actionEvent;
     Stage stage;
     Parent scene;
     @FXML
@@ -45,68 +50,119 @@ public class AddProductController implements Initializable {
     private TextField nameTxt;
     @FXML
     private TextField priceTxt;
+
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private EventObject event;
+
+
+    //the onActionAddPart method copies the selected part on the
+    // addPartTableView to the lower table(associatedPartTableView)
     public void onActionAddPart(ActionEvent event) throws IOException {
-        int id=Integer.parseInt(idTxt.getText());
-        String name=nameTxt.getText();
-        double price=Double.parseDouble(priceTxt.getText());
-        int max=Integer.parseInt(maxTxt.getText());
-        int min=Integer.parseInt(minTxt.getText());
-        invTxt.getText();
-        int stock = 0;
-        //create Product object and add that object to the end of the Inventory list
-        Inventory.addProduct(new Product(id,name,price,stock,min,max));
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-    }
-    //removes selected part from the bottom table-disassociating or removing a part from a product
-    public void removeAssociatedPart(ActionEvent event)
-    {
+        Part SP = addPartTableView.getSelectionModel().getSelectedItem();
+        if (SP == null)
+            return;
+        associatedParts.add(SP);
+        associatedPartTableView.setItems(associatedParts);
+
+       // associatedPartTableView.setItems(allParts);
+//
+        //assigning each column an attribute that you wish to display in a row
+        PartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        PartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        InvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+//        else {
+//            if (!associatedParts.contains(SP)) {
+//                associatedParts.add(SP);
+//                associatedPartTableView.setItems(associatedParts);
+//
+        }
+
+    //removes selected part from the bottom table(associatedPartTableView)-disassociating or removing a part from a product
+    public void removeAssociatedPart(ActionEvent event) {
         Part SP = associatedPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
             return;
-        allParts.remove(SP);
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Associated Part");
+            alert.setHeaderText("Remove");
+            alert.setContentText("Are you sure you want to remove this associated part");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get()==ButtonType.OK){
+                associatedParts.remove(SP); //user chose OK,takes part off
+            } else {
+                //user chose cancel or closed the dialog box
+            }
+        }
     }
-    public void onActionCancel(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void Cancel(ActionEvent event) throws IOException {
+                stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+                stage.setTitle("Inventory Management System");
+                stage.setScene(new Scene(scene));
+                stage.show();
     }
-    public void onActionSaveProduct(ActionEvent event) throws IOException{
+    public void SaveProduct(ActionEvent event )throws IOException {
         String name = nameTxt.getText();
-        int stock = Integer.parseInt(invTxt.getText());
+        int stock = parseInt(invTxt.getText());
         double price = Double.parseDouble(priceTxt.getText());
-        int max = Integer.parseInt(maxTxt.getText());
-        int min = Integer.parseInt(minTxt.getText());
-        
+        int max = parseInt(maxTxt.getText());
+        int min = parseInt(minTxt.getText());
+        //Add product-to the ProductTableView when save button on Add Product form is hit.
+        Product product = new Product(Inventory.getNextProductId(),name,price,stock,min,max);
+        //   product.setId(parseInt(this.idTxt.getText()));
+//        product.setName(this.nameTxt.getText());
+//        product.setStock(parseInt(this.invTxt.getText()));
+//        product.setMin(parseInt(this.minTxt.getText()));
+//        product.setMax(parseInt(this.maxTxt.getText()));
+//        product.setPrice(Double.parseDouble(this.priceTxt.getText()));
+        //product.addAssociatedPart((Part) associatedParts);
+        Inventory.addProduct(product);
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+        stage.setTitle("Inventory Management System");
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+    public void searchPart(ActionEvent actionEvent) {
+
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //associating tableview with list where data will be stored
+        //associating tableview with list(Observable List) where data will be stored
         addPartTableView.setItems(allParts);
 
-        //assigning each column an attribute that you wish to display in a row
+        //assigning each column on TableView an attribute that you wish to display in a row
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         invLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         priceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         //associating tableview with list where data will be stored
-        associatedPartTableView.setItems(allParts);
-
-        //assigning each column an attribute that you wish to display in a row
-        partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        invLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        priceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+//        associatedPartTableView.setItems(allParts);
+//
+//        //assigning each column an attribute that you wish to display in a row
+//        PartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        PartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+//        InvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+//        PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
+    public void start(Stage stage) throws IOException {
+        InHouse nut = new InHouse(getNextPartId(), "nut", 40, 0, 100, 980, 1223);
+        InHouse screw = new InHouse(getNextPartId(), "screw", 80, 70, 400, 1100, 3234);
+        InHouse clippers = new InHouse(getNextPartId(), "clippers", 90, 100, 600, 1300, 3500);
+        Outsourced chain = new Outsourced(getNextPartId(), "chain", 50, 40, 120, 834, "ACE Hardware");
+        Outsourced nail = new Outsourced(getNextPartId(), "nail", 60, 50, 180, 734, "Home Depot");
+        Outsourced handles = new Outsourced(getNextPartId(), "handles", 50, 40, 120, 834, "ACE Hardware");
 
-
+        Inventory.addPart(nut);
+        Inventory.addPart(screw);
+        Inventory.addPart(chain);
+        Inventory.addPart(nail);
+        Inventory.addPart(clippers);
+        Inventory.addPart(handles);
+    }
 }
 

@@ -6,18 +6,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.example.demo1.Inventory.allParts;
 import static com.example.demo1.Inventory.allProducts;
+import static javafx.fxml.FXMLLoader.*;
+import static javafx.fxml.FXMLLoader.load;
+//import java.util.logging.Logger;
+
 
 public class MainScreenController implements Initializable {
     public TableColumn<Object, Object> partIdCol;
@@ -28,6 +31,7 @@ public class MainScreenController implements Initializable {
     public TableColumn<Object, Object> productNameCol;
     public TableColumn InvLevelCol;
     public TableColumn<Object, Object> PriceCostCol;
+    public TableColumn invLevCol2;
     Stage stage;
     Parent scene;
     @FXML
@@ -40,11 +44,10 @@ public class MainScreenController implements Initializable {
     @FXML
     public void onActionOpenAddParForm(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("AddParForm.fxml"));
+        scene = load(getClass().getResource("AddParForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
     //selection of part to be modified from partsMainTable
     public void onActionOpenModifyPartForm(ActionEvent event) throws IOException {
         Part SP = partsMainTableView.getSelectionModel().getSelectedItem();
@@ -55,48 +58,68 @@ public class MainScreenController implements Initializable {
         scene = loader.load();
         ModifyPartController controller = loader.getController();
         controller.setparts(SP);
-        stage.setTitle("Modify Part");
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
     //selection of row or part and deletion of selected part
     public void onActionDeleteSelectedPart(ActionEvent event) {
         Part SP = partsMainTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
             return;
-        //confirmDialo
-        allParts.remove(SP);
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Parts");
+            alert.setHeaderText("Delete");
+            alert.setContentText("Are you sure you want to delete this part");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get()==ButtonType.OK){
+                allParts.remove(SP); //user chose OK,takes part off
+            } else {
+                //user chose cancel or closed the dialog box,nothing happens
+            }
+        }
     }
-
     public void onActionOpenModifyProductForm(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("ModifyProductForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-    }
-
-    public void onActionDeleteSelectedProduct() {
-        Product SP = (Product) productsMainTableView.getSelectionModel().getSelectedItem();
+        Product SP = productsMainTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
             return;
-        allProducts.remove(SP);
-    }
 
-    public void onActionOpenAddProductForm(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("AddProductForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyProductForm.fxml"));
+        scene = loader.load();
+        ModifyProductController controller = loader.getController();
+        controller.setproducts(SP);
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
+    public void onActionDeleteSelectedProduct() {
+        Product SP = productsMainTableView.getSelectionModel().getSelectedItem();
+        if (SP == null)
+            return;
+        else{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Products");
+            alert.setHeaderText("Delete");
+            alert.setContentText("Are you sure you want to delete this product");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get()==ButtonType.OK){
+                allProducts.remove(SP); //user chose OK,takes part off
+            } else {
+                //user chose cancel or closed the dialog box,nothing happens
+            }
+        }
+    }
+    public void onActionOpenAddProductForm(ActionEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = load(getClass().getResource("AddProductForm.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
     public void onActionExitMainForm() {
         System.exit(0);
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         //associating tableview with list where data will be stored
         partsMainTableView.setItems(allParts);
 
@@ -109,7 +132,7 @@ public class MainScreenController implements Initializable {
         productsMainTableView.setItems(allProducts);
         productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        invLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        invLevCol2.setCellValueFactory(new PropertyValueFactory<>("stock"));
         PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 }

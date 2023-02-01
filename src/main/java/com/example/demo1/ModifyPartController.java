@@ -13,13 +13,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static java.lang.Integer.parseInt;
+
 public class ModifyPartController implements Initializable {
+    public ToggleGroup modifyPartToggleGrp;
     Stage stage;
     Parent scene;
     public RadioButton inHouseBtn;
     public RadioButton outsourcedBtn;
     @FXML
-    private int idTxt;
+    private TextField idTxt;
     @FXML
     private TextField invTxt;
     @FXML
@@ -37,27 +40,28 @@ public class ModifyPartController implements Initializable {
     @FXML
     private Label labelTxt;
     public Part sp; //field of the selected part
-
+    private int partIndex;
 
     //creation of an object then addition of the object to the observable list.
     //save part
     public void onActionSavePart(ActionEvent event) throws IOException {
+        int id = Integer.parseInt(idTxt.getText());
         String name = nameTxt.getText();
         int stock = Integer.parseInt(invTxt.getText());
         double price = Double.parseDouble(priceTxt.getText());
         int max = Integer.parseInt(maxTxt.getText());
-        int min = Integer.parseInt(minTxt.getText());
+        int min = parseInt(minTxt.getText());
         int machineId = 0;
         String companyName = "";
 
         //create  functionality of InHouse and Outsourced  button on modify part form
         if (inHouseBtn.isSelected()) {
-            machineId = Integer.parseInt(machineIdTxt.getText());
-            Inventory.addPart(new InHouse(Inventory.getNextPartId(), name, price, stock, min, max, machineId));
+            machineId = parseInt(machineIdTxt.getText());
+            Inventory.updatePart(partIndex,new InHouse(id, name, price, stock, min, max, machineId));
         }
         else {
             companyName = machineIdTxt.getText();
-            Inventory.addPart(new Outsourced(Inventory.getNextPartId(), name, price, stock, min, max, companyName));
+            Inventory.updatePart(partIndex,new Outsourced(id, name, price, stock, min, max, companyName));
         }
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
@@ -83,29 +87,27 @@ public class ModifyPartController implements Initializable {
             labelTxt.setText("Company Name");
         }
     }
-
+    //the method transfers the data of the selected part in the partsTableView to the Modify Part table
     public void setparts(Part sp) {
         this.sp = sp;
-        idTxt = Inventory.getAllParts().indexOf(sp);
-        //idTxt.setText(Integer.toString(sp.getId()));
+        partIndex = Inventory.getAllParts().indexOf(sp);
+        idTxt.setText(String.valueOf(sp.getId()));
         nameTxt.setText(sp.getName());
-        Inventory.setText(Integer.toString(sp.getStock()));
+        invTxt.setText(Integer.toString(sp.getStock()));
         priceTxt.setText(Double.toString(sp.getPrice()));
         maxTxt.setText(Integer.toString(sp.getMax()));
         minTxt.setText(Integer.toString(sp.getMin()));
-        if(sp instanceof InHouse ih){
+        if(sp instanceof InHouse ){
             inHouseBtn.setSelected(true);
             this.inHouseBtn.setText("Machine ID");
-            inHouseBtn.setText(Integer.toString(ih.getMachineId()));
+            machineIdTxt.setText(Integer.toString(((InHouse)sp).getMachineId()));
         }
         else{
             Outsourced os = (Outsourced) sp;
            outsourcedBtn.setSelected(true);
             this.outsourcedBtn.setText("Company Name");
-            outsourcedBtn.setText(os.getCompanyName());
+            machineIdTxt.setText(os.getCompanyName());
         }
-
-
-
     }
+
 }
