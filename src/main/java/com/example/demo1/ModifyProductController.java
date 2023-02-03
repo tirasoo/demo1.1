@@ -16,12 +16,14 @@ import java.net.URL;
 import java.util.EventObject;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.scene.control.TableView;
 
 import static com.example.demo1.Inventory.allParts;
 import static com.example.demo1.Inventory.allProducts;
 import static java.lang.Integer.parseInt;
 
 public class ModifyProductController implements Initializable {
+    public TextField searchPartField;
     Stage stage;
     Parent scene;
 
@@ -57,11 +59,15 @@ public class ModifyProductController implements Initializable {
     private TableColumn<?, ?> priceCostCol;
     @FXML
     private TextField priceTxt;
+    @FXML
+    private TextField partSearchField;
+
     public Product sp; //field of the selected product from the productsTableView
     private int productIndex;
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private EventObject event;
     private static int selectedProductIndex;
+
     public void onActionAddPart(ActionEvent event) {
         Part SP = (Part) addPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
@@ -151,7 +157,18 @@ public class ModifyProductController implements Initializable {
             }
         }
     }
-
     public void searchPart(ActionEvent event) {
+        String searchItem = partSearchField.getText();
+        ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
+        if(foundParts.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("No Match Found");
+            alert.setHeaderText("Unable to locate part");
+            alert.showAndWait();
+        } else {
+            addPartTableView.setItems(foundParts);
+        }
+
     }
 }

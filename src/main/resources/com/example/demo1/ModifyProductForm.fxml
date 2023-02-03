@@ -20,7 +20,6 @@
             <Font name="Arial Black" size="13.0" />
          </font>
       </Label>
-      <Button layoutX="579.0" layoutY="14.0" mnemonicParsing="false" onAction="#searchPart" opacity="0.39" prefHeight="26.0" prefWidth="199.0" text="Search by Part ID or Name" />
       <HBox layoutX="46.0" layoutY="125.0" prefHeight="41.0" prefWidth="243.0">
          <children>
             <Label prefHeight="36.0" prefWidth="16.0" text="ID">
@@ -125,5 +124,6 @@
       <Button layoutX="573.0" layoutY="500.0" mnemonicParsing="false" onAction="#onActionRemoveAssPart" prefHeight="26.0" prefWidth="201.0" text="Remove Associated Part" />
       <Button layoutX="573.0" layoutY="547.0" mnemonicParsing="false" onAction="#onActionSaveProduct" text="Save " />
       <Button layoutX="720.0" layoutY="547.0" mnemonicParsing="false" onAction="#onActionCancel" text="Cancel" />
+      <TextField fx:id="partSearchField" layoutX="677.0" layoutY="32.0" onAction="#searchPart" promptText="Search by Part ID or Name" />
    </children>
 </AnchorPane>

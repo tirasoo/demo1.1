@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -20,7 +21,6 @@
             <Font name="Arial Black" size="13.0" />
          </font>
       </Label>
-      <Button layoutX="590.0" layoutY="22.0" mnemonicParsing="false" onAction="#searchPart" opacity="0.33" prefHeight="26.0" prefWidth="166.0" text="Search by P:art ID or Name" />
       <HBox layoutX="38.0" layoutY="115.0" prefHeight="41.0" prefWidth="241.0">
          <children>
             <Label prefHeight="36.0" prefWidth="16.0" text="ID">
@@ -125,6 +125,8 @@
       <Button layoutX="563.0" layoutY="490.0" mnemonicParsing="false" onAction="#removeAssociatedPart" prefHeight="26.0" prefWidth="201.0" text="Remove Associated Part" />
       <Button layoutX="563.0" layoutY="537.0" mnemonicParsing="false" onAction="#SaveProduct" text="Save " />
       <Button layoutX="710.0" layoutY="537.0" mnemonicParsing="false" onAction="#Cancel" text="Cancel" />
+      <Slider layoutY="1.0" orientation="VERTICAL" />
+      <TextField fx:id="partSearchField" layoutX="667.0" layoutY="28.0" onAction="#searchPart" promptText="Search by Part ID or Name" />
    </children>
    <padding>
       <Insets right="-1.0" />

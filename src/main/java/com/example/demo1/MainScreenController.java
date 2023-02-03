@@ -1,5 +1,6 @@
 package com.example.demo1;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.TableView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +43,18 @@ public class MainScreenController implements Initializable {
     private TableView<Product> productsMainTableView;
     @FXML
     private TableView<Part> addPartTableView;
+    @FXML
+    private TextField partSearchField;
+    @FXML
+    private TextField productSearchField;
 
+    /**
+     *
+     * @param event
+     * @throws IOException
+     * RUNTIME ERRORS:
+     * FUTURE ENHANCEMENTS:
+     */
     @FXML
     public void onActionOpenAddParForm(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -114,6 +128,41 @@ public class MainScreenController implements Initializable {
         scene = load(getClass().getResource("AddProductForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+    /**
+     * the method searches for a part by ID or Name in the partsTableView
+     * @param event
+     */
+    public void onActionSearchPart(ActionEvent event) {
+        String searchItem = partSearchField.getText();
+        ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
+        if(foundParts.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("No Match Found");
+            alert.setHeaderText("Unable to locate part");
+            alert.showAndWait();
+        } else {
+            partsMainTableView.setItems(foundParts);
+        }
+    }
+    /**
+     * the method searches for a product by ID or Name in the productsTableView
+     * @param event
+     */
+    public void onActionSearchProduct(ActionEvent event) {
+        String searchprod = productSearchField.getText();
+        ObservableList<Product> foundProducts = Inventory.lookupProduct(searchprod);
+        if(foundProducts.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("No Match Found");
+            alert.setHeaderText("Unable to locate product");
+            alert.showAndWait();
+        } else {
+            productsMainTableView.setItems(foundProducts);
+        }
+
     }
     public void onActionExitMainForm() {
         System.exit(0);

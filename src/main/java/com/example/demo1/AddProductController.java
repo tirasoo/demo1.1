@@ -53,6 +53,8 @@ public class AddProductController implements Initializable {
 
     private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private EventObject event;
+    @FXML
+    private TextField partSearchField;
 
 
     //the onActionAddPart method copies the selected part on the
@@ -127,7 +129,17 @@ public class AddProductController implements Initializable {
         stage.show();
     }
     public void searchPart(ActionEvent actionEvent) {
-
+        String searchItem = partSearchField.getText();
+        ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
+        if(foundParts.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("No Match Found");
+            alert.setHeaderText("Unable to locate part");
+            alert.showAndWait();
+        } else {
+            addPartTableView.setItems(foundParts);
+        }
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
