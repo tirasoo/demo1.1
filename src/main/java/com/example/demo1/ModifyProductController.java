@@ -1,5 +1,11 @@
 package com.example.demo1;
 
+/**
+ * @author Tiras Ombasa
+ * Student ID: 001244560
+ */
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +28,9 @@ import static com.example.demo1.Inventory.allParts;
 import static com.example.demo1.Inventory.allProducts;
 import static java.lang.Integer.parseInt;
 
+/**
+ *It is the controller class for the ModifyProduct.fxml file.
+ */
 public class ModifyProductController implements Initializable {
     public TextField searchPartField;
     Stage stage;
@@ -68,6 +77,10 @@ public class ModifyProductController implements Initializable {
     private EventObject event;
     private static int selectedProductIndex;
 
+    /**
+     * the method adds a selected part to the associatedPartTableView from the addPartTableView
+     * @param event
+     */
     public void onActionAddPart(ActionEvent event) {
         Part SP = (Part) addPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
@@ -79,12 +92,24 @@ public class ModifyProductController implements Initializable {
             }
         }
     }
+
+    /**
+     * the method exits the modify product form back to the main form
+     * @param event
+     * @throws IOException
+     */
     public void onActionCancel(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * the method saves a product to the productsMainTableView after modifications
+     * @param event
+     * @throws IOException
+     */
     public void onActionSaveProduct(ActionEvent event) throws IOException {
         String name = nameTxt.getText();
         int stock = parseInt(invTxt.getText());
@@ -110,6 +135,12 @@ public class ModifyProductController implements Initializable {
         stage.setScene(new Scene(mp));
         stage.show();
     }
+
+    /**
+     * the method transfers the data of the selected product in the productsTableView to the Modify Product table for
+     * modification
+     * @param sp
+     */
     public void setproducts(Product sp) {
         this.sp = sp;
         productIndex = Inventory.getAllProducts().indexOf(sp);
@@ -120,6 +151,12 @@ public class ModifyProductController implements Initializable {
         maxTxt.setText(Integer.toString(sp.getMax()));
         minTxt.setText(Integer.toString(sp.getMin()));
     }
+
+    /**
+     * this method initializes the addPartTableView and the associatedPartTableView tables
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //associating tableview with list(Observable List) where data will be stored
@@ -140,7 +177,12 @@ public class ModifyProductController implements Initializable {
        InvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
        PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
-    public void onActionRemoveAssPart(ActionEvent actionEvent) {
+
+    /**
+     * this method removes/deletes a part from the associatedPartTableView disassociating it from the product
+     * @param event
+     */
+    public void onActionRemoveAssPart(ActionEvent event) {
         Part SP = associatedPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
             return;
@@ -157,17 +199,32 @@ public class ModifyProductController implements Initializable {
             }
         }
     }
+
+    /**
+     * this method searches for a part by ID or name in the addPartTableView
+     * @param event
+     */
     public void searchPart(ActionEvent event) {
         String searchItem = partSearchField.getText();
-        ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
-        if(foundParts.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setTitle("No Match Found");
-            alert.setHeaderText("Unable to locate part");
-            alert.showAndWait();
-        } else {
-            addPartTableView.setItems(foundParts);
+        try {
+            int id = Integer.parseInt(searchItem);
+            Part p = Inventory.lookupPart(id);
+            if (p != null) {
+                addPartTableView.getSelectionModel().select(p);
+            } else
+                throw new NumberFormatException();
+        }
+        catch (NumberFormatException e) {
+            ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
+            if (foundParts.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                //alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setTitle("No Match Found");
+                alert.setHeaderText("Unable to locate part");
+                alert.showAndWait();
+            } else {
+                addPartTableView.setItems(foundParts);
+            }
         }
 
     }

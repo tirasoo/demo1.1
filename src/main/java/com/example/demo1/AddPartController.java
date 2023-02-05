@@ -1,5 +1,11 @@
 package com.example.demo1;
 
+/**
+ * @author Tiras Ombasa
+ * Student ID: 001244560
+ */
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +17,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+/**
+ * It is the controller class for the AddPart.fxml file.
+ */
 public class AddPartController implements Initializable {
     Stage stage;
     Parent scene;
@@ -37,6 +47,12 @@ public class AddPartController implements Initializable {
 
     //creation of an object then addition of the object to the observable list.
     //save part
+
+    /**
+     * method creates an object/part then adds the object to the observable list
+     * @param event
+     * @throws IOException
+     */
     public void onActionSavePart(ActionEvent event) throws IOException {
         String name = nameTxt.getText();
         int stock = Integer.parseInt(invTxt.getText());
@@ -61,17 +77,33 @@ public class AddPartController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * this method exits the add part form and returns to Main form.
+     * @param event
+     * @throws IOException
+     */
     public void onActionCancelPart(ActionEvent event) throws IOException {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
     }
+
+    /**
+     * this method initializes the add Part form
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
 
     }
+    /**
+     * this method sets the functionality of the in-house and outsourced buttons when they are selected
+     * @param event
+     */
     public void ifButtonSelected(ActionEvent event)
     {
         if (inHouseBtn.isSelected()){

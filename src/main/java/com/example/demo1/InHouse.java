@@ -1,4 +1,13 @@
     package com.example.demo1;
+
+    /**
+     * @author Tiras Ombasa
+     * Student ID: 001244560
+     */
+
+    /**
+     * creates an In-house class which is a subclass of the part class
+     */
     // this class inherits only the Part class methods and properties.
     public class InHouse extends Part {
 
@@ -17,7 +26,6 @@
         public int getMachineId() {
             return machineId;
         }
-
         /**
          * @param machineId the machineId to set
          */

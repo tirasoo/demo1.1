@@ -1,9 +1,17 @@
 package com.example.demo1;
 
+/**
+ * @author Tiras Ombasa
+ * Student ID: 001244560
+ */
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
+/**
+ * It creates a class called Product.
+ */
 public class Product {
         //class contents go here
         //class definition-->defining the object's variables(instance variables/object fields/object attributes)
@@ -15,6 +23,17 @@ public class Product {
         private int stock;
         private int min;
         private int max;
+
+    /**
+     * It creates a constructor for the Product class->constructor definition.
+     *
+     * @param id
+     * @param name
+     * @param price
+     * @param stock
+     * @param min
+     * @param max
+     */
 
         public Product(int id, String name, double price, int stock, int min, int max) {
             this.id = id;
@@ -124,17 +143,31 @@ public class Product {
             this.max = max;
         }
 
-        public void addAssociatedPart(Part part)
+    /**
+     *The method adds the Part object passed as a parameter to the associatedParts ArrayList.
+     * @param part
+     */
+    public void addAssociatedPart(Part part)
         {
-associatedParts.add(part);
+            associatedParts.add(part);
         }
 
-        public boolean deleteAssociatedPart(Part selectedAssociatedPart)
+
+    /**
+     * The method takes one parameter, selectedAssociatedPart, which is of type Part and return boolean
+     * @param selectedAssociatedPart
+     * @return boolean
+     */
+    public boolean deleteAssociatedPart(Part selectedAssociatedPart)
         {
             return false;
         }
 
-        public  ObservableList<Part> getAllAssociatedParts()
+    /**
+     * The getAllAssociatedParts() method is returning an ObservableList of Part objects.
+     * @return associatedParts
+     */
+    public  ObservableList<Part> getAllAssociatedParts()
         {
             return associatedParts;
         }

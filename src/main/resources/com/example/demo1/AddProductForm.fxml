@@ -28,7 +28,7 @@
                   <Insets right="35.0" />
                </HBox.margin>
             </Label>
-            <TextField fx:id="idTxt" promptText="Auto-Gen   disabled" />
+            <TextField fx:id="idTxt" editable="false" promptText="Auto-Gen   disabled" />
          </children>
       </HBox>
       <HBox layoutX="38.0" layoutY="186.0" prefHeight="41.0" prefWidth="241.0">

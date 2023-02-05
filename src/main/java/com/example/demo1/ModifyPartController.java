@@ -1,5 +1,11 @@
 package com.example.demo1;
 
+/**
+ * @author Tiras Ombasa
+ * Student ID: 001244560
+ */
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +21,9 @@ import java.util.ResourceBundle;
 
 import static java.lang.Integer.parseInt;
 
+/**
+ *It is the controller class for the ModifyPart.fxml file.
+ */
 public class ModifyPartController implements Initializable {
     public ToggleGroup modifyPartToggleGrp;
     Stage stage;
@@ -44,6 +53,12 @@ public class ModifyPartController implements Initializable {
 
     //creation of an object then addition of the object to the observable list.
     //save part
+
+    /**
+     * the method saves the part on the partsMainTableView after modifications.
+     * @param event
+     * @throws IOException
+     */
     public void onActionSavePart(ActionEvent event) throws IOException {
         int id = Integer.parseInt(idTxt.getText());
         String name = nameTxt.getText();
@@ -68,12 +83,24 @@ public class ModifyPartController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * the method exits the Modify Part form and returns to the Main form
+     * @param event
+     * @throws IOException
+     */
     public void onActionCancelPart(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * initializes the modify part table
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
@@ -87,7 +114,12 @@ public class ModifyPartController implements Initializable {
             labelTxt.setText("Company Name");
         }
     }
-    //the method transfers the data of the selected part in the partsTableView to the Modify Part table
+
+    /**
+     * the method transfers the data of the selected part in the partsTableView to the Modify Part form
+     * @param sp
+     */
+    //
     public void setparts(Part sp) {
         this.sp = sp;
         partIndex = Inventory.getAllParts().indexOf(sp);

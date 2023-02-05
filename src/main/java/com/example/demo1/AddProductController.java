@@ -1,5 +1,10 @@
 package com.example.demo1;
 
+/**
+ * @author Tiras Ombasa
+ * Student ID: 001244560
+ */
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +28,10 @@ import static com.example.demo1.Inventory.allParts;
 import static com.example.demo1.Inventory.getNextPartId;
 import static java.lang.Integer.parseInt;
 
-
+/**
+ * It is the controller class for the AddProduct.fxml file.
+ *
+ */
 public class AddProductController implements Initializable {
     public TableView<Part> addPartTableView;
     public TableColumn<Object, Object> partIdCol;
@@ -56,9 +64,11 @@ public class AddProductController implements Initializable {
     @FXML
     private TextField partSearchField;
 
-
-    //the onActionAddPart method copies the selected part on the
-    // addPartTableView to the lower table(associatedPartTableView)
+    /**
+     * this method selects a part on the addPartTableView and copies/adds it to the associatedPartTableView
+     * @param event
+     * @throws IOException
+     */
     public void onActionAddPart(ActionEvent event) throws IOException {
         Part SP = addPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
@@ -82,6 +92,11 @@ public class AddProductController implements Initializable {
         }
 
     //removes selected part from the bottom table(associatedPartTableView)-disassociating or removing a part from a product
+
+    /**
+     * this method removes/deletes a part from the associatedPartTableView disassociating it from the product
+     * @param event
+     */
     public void removeAssociatedPart(ActionEvent event) {
         Part SP = associatedPartTableView.getSelectionModel().getSelectedItem();
         if (SP == null)
@@ -99,6 +114,12 @@ public class AddProductController implements Initializable {
             }
         }
     }
+
+    /**
+     * this method exits the add product form and returns to the main form
+     * @param event
+     * @throws IOException
+     */
     public void Cancel(ActionEvent event) throws IOException {
                 stage = (Stage)((Button)event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
@@ -106,6 +127,12 @@ public class AddProductController implements Initializable {
                 stage.setScene(new Scene(scene));
                 stage.show();
     }
+
+    /**
+     * this method adds a product to the productsMainTableView
+     * @param event
+     * @throws IOException
+     */
     public void SaveProduct(ActionEvent event )throws IOException {
         String name = nameTxt.getText();
         int stock = parseInt(invTxt.getText());
@@ -128,19 +155,39 @@ public class AddProductController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * this method searches for a part by ID or name in the addPartTableView
+     * @param actionEvent
+     */
     public void searchPart(ActionEvent actionEvent) {
         String searchItem = partSearchField.getText();
-        ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
-        if(foundParts.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setTitle("No Match Found");
-            alert.setHeaderText("Unable to locate part");
-            alert.showAndWait();
-        } else {
-            addPartTableView.setItems(foundParts);
+        try {
+            int id = Integer.parseInt(searchItem);
+            Part p = Inventory.lookupPart(id);
+            if (p != null) {
+                addPartTableView.getSelectionModel().select(p);
+            } else
+                throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            ObservableList<Part> foundParts = Inventory.lookupPart(searchItem);
+            if (foundParts.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                //alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setTitle("No Match Found");
+                alert.setHeaderText("Unable to locate part");
+                alert.showAndWait();
+            } else {
+                addPartTableView.setItems(foundParts);
+            }
         }
     }
+
+    /**
+     * this method initializes the cells in the addPartTableView
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //associating tableview with list(Observable List) where data will be stored
@@ -161,6 +208,12 @@ public class AddProductController implements Initializable {
 //        InvLevelCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
 //        PriceCostCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
+
+    /**
+     * this method creates a new stage/ initializes the addPartTableView and displays it.
+     * @param stage
+     * @throws IOException
+     */
     public void start(Stage stage) throws IOException {
         InHouse nut = new InHouse(getNextPartId(), "nut", 40, 0, 100, 980, 1223);
         InHouse screw = new InHouse(getNextPartId(), "screw", 80, 70, 400, 1100, 3234);
