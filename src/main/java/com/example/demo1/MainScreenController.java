@@ -188,7 +188,7 @@ public class MainScreenController implements Initializable {
     }
         /**
          * RUNTIME ERROR: Cannot invoke javafx.scene.control.textfield.getText() because "this.partSearchField
-         * is null"
+         * is null"-->i corrected the error by importing the javafx.Scene.Control.Textfield.getText()
          * the method searches for a product by product ID or Name in the productsTableView
          * @param event
          */
