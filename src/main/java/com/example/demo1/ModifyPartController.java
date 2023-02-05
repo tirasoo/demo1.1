@@ -60,28 +60,48 @@ public class ModifyPartController implements Initializable {
      * @throws IOException
      */
     public void onActionSavePart(ActionEvent event) throws IOException {
-        int id = Integer.parseInt(idTxt.getText());
-        String name = nameTxt.getText();
-        int stock = Integer.parseInt(invTxt.getText());
-        double price = Double.parseDouble(priceTxt.getText());
-        int max = Integer.parseInt(maxTxt.getText());
-        int min = parseInt(minTxt.getText());
-        int machineId = 0;
-        String companyName = "";
+        try {
+            int stock = Integer.parseInt(invTxt.getText());
+            int max = Integer.parseInt(maxTxt.getText());
+            int min = Integer.parseInt(minTxt.getText());
+            if (max < min) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in max and min entries");
+                alert.setContentText("max value should be greater than min value");
+                alert.showAndWait();
+            } else if (stock < min || stock > max) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in Inventory Field");
+                alert.setContentText("Inventory field must be between max and min values");
+                alert.showAndWait();
+            } else {
+                String name = nameTxt.getText();
+                double price = Double.parseDouble(priceTxt.getText());
+                int machineId = 0;
+                String companyName = "";
 
-        //create  functionality of InHouse and Outsourced  button on modify part form
-        if (inHouseBtn.isSelected()) {
-            machineId = parseInt(machineIdTxt.getText());
-            Inventory.updatePart(partIndex,new InHouse(id, name, price, stock, min, max, machineId));
+                //create  functionality of InHouse and Outsourced  button on add part form
+                if (inHouseBtn.isSelected()) {
+                    machineId = Integer.parseInt(machineIdTxt.getText());
+                    Inventory.addPart(new InHouse(Inventory.getNextPartId(), name, price, stock, min, max, machineId));
+                } else {
+                    companyName = machineIdTxt.getText();
+                    Inventory.addPart(new Outsourced(Inventory.getNextPartId(), name, price, stock, min, max, companyName));
+                }
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+                stage.setTitle("Inventory Management System");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
         }
-        else {
-            companyName = machineIdTxt.getText();
-            Inventory.updatePart(partIndex,new Outsourced(id, name, price, stock, min, max, companyName));
+        catch (Exception e){
+            Alert alert =new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error in modifying part");
+            alert.setContentText("Check fields for correct input values");
+            alert.showAndWait();
         }
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+
     }
 
     /**

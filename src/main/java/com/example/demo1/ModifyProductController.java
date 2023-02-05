@@ -111,31 +111,48 @@ public class ModifyProductController implements Initializable {
      * @throws IOException
      */
     public void onActionSaveProduct(ActionEvent event) throws IOException {
-        String name = nameTxt.getText();
-        int stock = parseInt(invTxt.getText());
-        double price = Double.parseDouble(priceTxt.getText());
-        int max = parseInt(maxTxt.getText());
-        int min = parseInt(minTxt.getText());
-        //Add product-to the ProductTableView when save button on Add Product form is hit.
-        Product product = new Product();
-        //   product.setId(parseInt(this.idTxt.getText()));
-        product.setName(this.nameTxt.getText());
-        product.setStock(parseInt(this.invTxt.getText()));
-        product.setMin(parseInt(this.minTxt.getText()));
-        product.setMax(parseInt(this.maxTxt.getText()));
-        product.setPrice(Double.parseDouble(this.priceTxt.getText()));
-        //product.addAssociatedPart((Part) associatedParts);
-        Inventory.updateProduct(productIndex, product);
+        try {
+            int stock = Integer.parseInt(invTxt.getText());
+            int max = Integer.parseInt(maxTxt.getText());
+            int min = Integer.parseInt(minTxt.getText());
+            if (max < min) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in max and min entries");
+                alert.setContentText("max value should be greater than min value");
+                alert.showAndWait();
+            } else if (stock < min || stock > max) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in Inventory Field");
+                alert.setContentText("Inventory field must be between max and min values");
+                alert.showAndWait();
+            }
+            //Add product-to the ProductTableView when save button on Add Product form is hit.
+            else {
+                Product product = new Product();
+                //   product.setId(parseInt(this.idTxt.getText()));
+                product.setName(this.nameTxt.getText());
+                product.setStock(parseInt(this.invTxt.getText()));
+                product.setMin(parseInt(this.minTxt.getText()));
+                product.setMax(parseInt(this.maxTxt.getText()));
+                product.setPrice(Double.parseDouble(this.priceTxt.getText()));
+                //product.addAssociatedPart((Part) associatedParts);
+                Inventory.updateProduct(productIndex, product);
 
-        stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("MainForm.fxml"));
-        Parent mp = loader.load();
-        stage.setTitle("Inventory Management System");
-        stage.setScene(new Scene(mp));
-        stage.show();
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("MainForm.fxml"));
+                Parent mp = loader.load();
+                stage.setTitle("Inventory Management System");
+                stage.setScene(new Scene(mp));
+                stage.show();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error in modifying product");
+            alert.setContentText("Check fields for correct input values");
+            alert.showAndWait();
+        }
     }
-
     /**
      * the method transfers the data of the selected product in the productsTableView to the Modify Product table for
      * modification

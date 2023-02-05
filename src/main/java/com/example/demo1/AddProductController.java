@@ -134,32 +134,51 @@ public class AddProductController implements Initializable {
      * @throws IOException
      */
     public void SaveProduct(ActionEvent event )throws IOException {
-        String name = nameTxt.getText();
-        int stock = parseInt(invTxt.getText());
-        double price = Double.parseDouble(priceTxt.getText());
-        int max = parseInt(maxTxt.getText());
-        int min = parseInt(minTxt.getText());
-        //Add product-to the ProductTableView when save button on Add Product form is hit.
-        Product product = new Product(Inventory.getNextProductId(),name,price,stock,min,max);
-        //   product.setId(parseInt(this.idTxt.getText()));
+        try {
+            int stock = Integer.parseInt(invTxt.getText());
+            int max = Integer.parseInt(maxTxt.getText());
+            int min = Integer.parseInt(minTxt.getText());
+            if (max < min) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in max and min entries");
+                alert.setContentText("max value should be greater than min value");
+                alert.showAndWait();
+            } else if (stock < min || stock > max) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error in Inventory Field");
+                alert.setContentText("Inventory field must be between max and min values");
+                alert.showAndWait();
+            } else {
+                String name = nameTxt.getText();
+                double price = Double.parseDouble(priceTxt.getText());
+                //Add product-to the ProductTableView when save button on Add Product form is hit.
+                Product product = new Product(Inventory.getNextProductId(), name, price, stock, min, max);
+                //   product.setId(parseInt(this.idTxt.getText()));
 //        product.setName(this.nameTxt.getText());
 //        product.setStock(parseInt(this.invTxt.getText()));
 //        product.setMin(parseInt(this.minTxt.getText()));
 //        product.setMax(parseInt(this.maxTxt.getText()));
 //        product.setPrice(Double.parseDouble(this.priceTxt.getText()));
-        //product.addAssociatedPart((Part) associatedParts);
-        Inventory.addProduct(product);
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
-        stage.setTitle("Inventory Management System");
-        stage.setScene(new Scene(scene));
-        stage.show();
+                //product.addAssociatedPart((Part) associatedParts);
+                Inventory.addProduct(product);
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
+                stage.setTitle("Inventory Management System");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+        }
+        catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error in adding product");
+            alert.setContentText("Check fields for correct input values");
+            alert.showAndWait();
+        }
     }
-
-    /**
-     * this method searches for a part by ID or name in the addPartTableView
-     * @param actionEvent
-     */
+        /**
+         * this method searches for a part by ID or name in the addPartTableView
+         * @param actionEvent
+         */
     public void searchPart(ActionEvent actionEvent) {
         String searchItem = partSearchField.getText();
         try {
