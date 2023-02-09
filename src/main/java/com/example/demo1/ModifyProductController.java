@@ -135,6 +135,10 @@ public class ModifyProductController implements Initializable {
                 product.setMin(parseInt(this.minTxt.getText()));
                 product.setMax(parseInt(this.maxTxt.getText()));
                 product.setPrice(Double.parseDouble(this.priceTxt.getText()));
+                for(Part part: associatedParts) {
+                    product.addAssociatedPart(part);
+
+                }
                 //product.addAssociatedPart((Part) associatedParts);
                 Inventory.updateProduct(productIndex, product);
 
@@ -167,6 +171,8 @@ public class ModifyProductController implements Initializable {
         priceTxt.setText(Double.toString(sp.getPrice()));
         maxTxt.setText(Integer.toString(sp.getMax()));
         minTxt.setText(Integer.toString(sp.getMin()));
+        associatedParts.setAll(sp.getAllAssociatedParts());
+        associatedPartTableView.setItems(sp.getAllAssociatedParts());
     }
 
     /**

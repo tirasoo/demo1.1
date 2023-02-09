@@ -173,7 +173,7 @@ public class Inventory {
     /**
      *the deleteProduct method takes the product object as parameter and uses the remove method
      * to remove the Product object(SP)from the List
-     * @parae  SP
+     * @param SP
      * @return boolean value
      */
     public static boolean deleteProduct(Product SP)

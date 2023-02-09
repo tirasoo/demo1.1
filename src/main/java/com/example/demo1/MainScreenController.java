@@ -128,13 +128,23 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
     /**
-     *  this method selects a row or product from the productsMainTableView for deletion
+     *  this method selects a row or product from the productsMainTableView for deletion if it does not
+     *  have a part associated with it
      * @param event
      */
     public void onActionDeleteSelectedProduct() {
         Product SP = productsMainTableView.getSelectionModel().getSelectedItem();
-        if (SP == null)
+        if (SP == null) {
             return;
+        }
+        ObservableList<Part> associatedParts = SP.getAllAssociatedParts();
+        if(associatedParts.size() >= 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setContentText("This product has an associated Part,Hence you cannot Delete!");
+            alert.showAndWait();
+            return;
+        }
         else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Products");

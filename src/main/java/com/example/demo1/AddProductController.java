@@ -153,6 +153,10 @@ public class AddProductController implements Initializable {
                 double price = Double.parseDouble(priceTxt.getText());
                 //Add product-to the ProductTableView when save button on Add Product form is hit.
                 Product product = new Product(Inventory.getNextProductId(), name, price, stock, min, max);
+                //Add associated parts when saving product
+                for(Part part : associatedParts) {
+                    product.addAssociatedPart(part);
+                }
                 //   product.setId(parseInt(this.idTxt.getText()));
 //        product.setName(this.nameTxt.getText());
 //        product.setStock(parseInt(this.invTxt.getText()));
