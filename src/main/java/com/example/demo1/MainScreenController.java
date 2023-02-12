@@ -78,13 +78,14 @@ public class MainScreenController implements Initializable {
      */
         public void onActionOpenModifyPartForm(ActionEvent event) throws IOException {
         Part SP = partsMainTableView.getSelectionModel().getSelectedItem();
+        int index = partsMainTableView.getSelectionModel().getSelectedIndex();
         if (SP == null)
             return;
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyPartForm.fxml"));
         scene = loader.load();
         ModifyPartController controller = loader.getController();
-        controller.setparts(SP);
+        controller.setparts(index,SP);
         stage.setScene(new Scene(scene));
         stage.show();
     }

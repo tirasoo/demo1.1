@@ -49,7 +49,7 @@ public class ModifyPartController implements Initializable {
     @FXML
     private Label labelTxt;
     public Part sp; //field of the selected part
-    private int partIndex;
+    public int index;
 
     //creation of an object then addition of the object to the observable list.
     //save part
@@ -83,10 +83,10 @@ public class ModifyPartController implements Initializable {
                 //create  functionality of InHouse and Outsourced  button on add part form
                 if (inHouseBtn.isSelected()) {
                     machineId = Integer.parseInt(machineIdTxt.getText());
-                    Inventory.addPart(new InHouse(Inventory.getNextPartId(), name, price, stock, min, max, machineId));
+                    Inventory.updatePart(this.index, new InHouse(Inventory.getNextPartId(), name, price, stock, min, max, machineId));
                 } else {
                     companyName = machineIdTxt.getText();
-                    Inventory.addPart(new Outsourced(Inventory.getNextPartId(), name, price, stock, min, max, companyName));
+                    Inventory.updatePart(this.index,new Outsourced(Inventory.getNextPartId(), name, price, stock, min, max, companyName));
                 }
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("MainForm.fxml"));
@@ -140,9 +140,10 @@ public class ModifyPartController implements Initializable {
      * @param sp
      */
     //
-    public void setparts(Part sp) {
+    public void setparts(int index,Part sp) {
         this.sp = sp;
-        partIndex = Inventory.getAllParts().indexOf(sp);
+        this.index =index;
+        //partIndex = Inventory.getAllParts().indexOf(sp);
         idTxt.setText(String.valueOf(sp.getId()));
         nameTxt.setText(sp.getName());
         invTxt.setText(Integer.toString(sp.getStock()));

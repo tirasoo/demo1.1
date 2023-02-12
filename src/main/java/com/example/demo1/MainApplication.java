@@ -25,17 +25,17 @@ public class MainApplication extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        InHouse nut = new InHouse(Inventory.getNextPartId(), "nut", 40, 0, 100, 980, 1223);
+        InHouse nut = new InHouse(Inventory.getNextPartId(), "nut", 40, 150, 100, 980, 1223);
         Inventory.addPart(nut); //create a new object and add it to the list
-        InHouse screw = new InHouse(Inventory.getNextPartId(), "screw", 80, 70, 400, 1100, 3234);
+        InHouse screw = new InHouse(Inventory.getNextPartId(), "screw", 80, 470, 400, 1100, 3234);
         Inventory.addPart(screw);
-        InHouse clippers = new InHouse(Inventory.getNextPartId(), "clippers", 90, 100, 600, 1300, 3500);
+        InHouse clippers = new InHouse(Inventory.getNextPartId(), "clippers", 90, 700, 600, 1300, 3500);
         Inventory.addPart(clippers);
-        Outsourced chain = new Outsourced(Inventory.getNextPartId(), "chain", 50, 40, 120, 834, "ACE Hardware");
+        Outsourced chain = new Outsourced(Inventory.getNextPartId(), "chain", 50, 400, 120, 834, "ACE Hardware");
         Inventory.addPart(chain);
-        Outsourced nail = new Outsourced(Inventory.getNextPartId(), "nail", 60, 50, 180, 734, "Home Depot");
+        Outsourced nail = new Outsourced(Inventory.getNextPartId(), "nail", 60, 500, 180, 734, "Home Depot");
         Inventory.addPart(nail);
-        Outsourced handles = new Outsourced(Inventory.getNextPartId(), "handles", 50, 40, 120, 834, "ACE Hardware");
+        Outsourced handles = new Outsourced(Inventory.getNextPartId(), "handles", 50, 450, 120, 834, "ACE Hardware");
         Inventory.addPart(handles);
 
         //add Products
